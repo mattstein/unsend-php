@@ -1,6 +1,6 @@
 # Unsend PHP Library
 
-This is a barebones little thing—you might want to wait until it’s fleshed out a bit.
+This is a barebones little thing for sending [Unsend](https://unsend.dev) messages. You might want to wait until it’s fleshed out a bit.
 
 ```php
 $client = \Unsend\Client::create('api-key', 'self-hosted-url');
