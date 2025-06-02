@@ -13,3 +13,5 @@ $response = $unsend->sendEmail([
     'text' => 'Heyo, this is a test!'
 ]);
 ```
+
+See the [API Reference](https://docs.unsend.dev/api-reference/introduction) for expected usage.
