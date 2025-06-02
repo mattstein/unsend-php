@@ -28,7 +28,7 @@ test('sendEmail sends', function () {
 });
 
 test('sendEmail requires arguments', function () {
-    $mock = new MockHandler();
+    $mock = new MockHandler;
     $handlerStack = HandlerStack::create($mock);
     $client = new Client(['handler' => $handlerStack]);
     $unsend = new \Unsend\Unsend($client);
@@ -42,7 +42,7 @@ test('sendEmail requires arguments', function () {
 })->throws(\Unsend\Exceptions\MissingArgumentException::class);
 
 test('sendEmail rejects invalid arguments', function () {
-    $mock = new MockHandler();
+    $mock = new MockHandler;
     $handlerStack = HandlerStack::create($mock);
     $client = new Client(['handler' => $handlerStack]);
     $unsend = new \Unsend\Unsend($client);

@@ -12,6 +12,7 @@ use Unsend\Exceptions\MissingArgumentException;
 class Unsend
 {
     private GuzzleClient $client;
+
     private static string $apiBase = '/api/v1';
 
     public function __construct(GuzzleClient $client)
@@ -25,12 +26,13 @@ class Unsend
     public function getEmail(string $emailId): ResponseInterface
     {
         return $this->client->get(
-            self::buildUrl('/emails/' . $emailId)
+            self::buildUrl('/emails/'.$emailId)
         );
     }
 
     /**
      * @todo figure out why this returns 404
+     *
      * @throws GuzzleException
      * @throws InvalidArgumentException
      */
@@ -45,8 +47,8 @@ class Unsend
         ];
 
         foreach ($parameters as $key => $value) {
-            if (!in_array($key, $supportedParameters, true)) {
-                throw new InvalidArgumentException('“' . $key . '” is not a valid argument.');
+            if (! in_array($key, $supportedParameters, true)) {
+                throw new InvalidArgumentException('“'.$key.'” is not a valid argument.');
             }
         }
 
@@ -88,13 +90,13 @@ class Unsend
 
         foreach ($requiredParameters as $parameter) {
             if (! isset($parameters[$parameter])) {
-                throw new MissingArgumentException('“' .$parameter . '” is required.');
+                throw new MissingArgumentException('“'.$parameter.'” is required.');
             }
         }
 
         foreach ($parameters as $key => $value) {
-            if (!in_array($key, $supportedParameters, true)) {
-                throw new InvalidArgumentException('“' . $key . '” is not a valid argument.');
+            if (! in_array($key, $supportedParameters, true)) {
+                throw new InvalidArgumentException('“'.$key.'” is not a valid argument.');
             }
         }
 
@@ -125,7 +127,7 @@ class Unsend
     public function updateSchedule(string $emailId, string $scheduledAt): ResponseInterface
     {
         return $this->client->patch(
-            self::buildUrl('/emails/' . $emailId),
+            self::buildUrl('/emails/'.$emailId),
             [
                 'scheduledAt' => $scheduledAt,
             ]
@@ -138,7 +140,7 @@ class Unsend
     public function cancelSchedule(string $emailId): ResponseInterface
     {
         return $this->client->post(
-            self::buildUrl('/emails/' . $emailId . '/cancel')
+            self::buildUrl('/emails/'.$emailId.'/cancel')
         );
     }
 
@@ -148,7 +150,7 @@ class Unsend
     public function getContact(string $contactBookId, string $contactId): ResponseInterface
     {
         return $this->client->get(
-            self::buildUrl('/contactBooks/' . $contactBookId . '/contacts/' . $contactId)
+            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId)
         );
     }
 
@@ -158,7 +160,7 @@ class Unsend
     public function getContacts(string $contactBookId): ResponseInterface
     {
         return $this->client->get(
-            self::buildUrl('/contactBooks/' . $contactBookId . '/contacts')
+            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts')
         );
     }
 
@@ -168,7 +170,7 @@ class Unsend
     public function createContact(string $contactBookId, array $parameters): ResponseInterface
     {
         return $this->client->post(
-            self::buildUrl('/contactBooks/' . $contactBookId . '/contacts'),
+            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts'),
             [
                 RequestOptions::JSON => $parameters,
             ]
@@ -181,7 +183,7 @@ class Unsend
     public function updateContact(string $contactBookId, string $contactId, array $parameters): ResponseInterface
     {
         return $this->client->patch(
-            self::buildUrl('/contactBooks/' . $contactBookId . '/contacts/' . $contactId),
+            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId),
             [
                 RequestOptions::JSON => $parameters,
             ]
@@ -194,7 +196,7 @@ class Unsend
     public function upsertContact(string $contactBookId, string $contactId, array $parameters): ResponseInterface
     {
         return $this->client->put(
-            self::buildUrl('/contactBooks/' . $contactBookId . '/contacts/' . $contactId),
+            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId),
             [
                 RequestOptions::JSON => $parameters,
             ]
@@ -207,18 +209,19 @@ class Unsend
     public function deleteContact(string $contactBookId, string $contactId): ResponseInterface
     {
         return $this->client->delete(
-            self::buildUrl('/contactBooks/' . $contactBookId . '/contacts/' . $contactId)
+            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId)
         );
     }
 
     /**
      * @todo figure out why this returns 404
+     *
      * @throws GuzzleException
      */
     public function getDomain(int $id): ResponseInterface
     {
         return $this->client->get(
-            self::buildUrl('/domains/' . $id)
+            self::buildUrl('/domains/'.$id)
         );
     }
 
@@ -251,13 +254,12 @@ class Unsend
     public function verifyDomain(int $id): ResponseInterface
     {
         return $this->client->put(
-            self::buildUrl('/domains/' . $id . '/verify')
+            self::buildUrl('/domains/'.$id.'/verify')
         );
     }
 
     private static function buildUrl(string $path): string
     {
-        return self::$apiBase . $path;
+        return self::$apiBase.$path;
     }
-
 }
