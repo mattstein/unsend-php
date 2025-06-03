@@ -21,6 +21,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/emails/get-email
      * @throws GuzzleException
      */
     public function getEmail(string $emailId): ResponseInterface
@@ -32,7 +33,7 @@ class Unsend
 
     /**
      * @todo figure out why this returns 404
-     *
+     * @see https://docs.unsend.dev/api-reference/emails/list-emails
      * @throws GuzzleException
      * @throws InvalidArgumentException
      */
@@ -61,6 +62,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/emails/send-email
      * @throws GuzzleException
      * @throws MissingArgumentException
      * @throws InvalidArgumentException
@@ -109,6 +111,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/emails/batch-email
      * @throws GuzzleException
      */
     public function batchEmail(array $parameters): ResponseInterface
@@ -122,6 +125,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/emails/update-schedule
      * @throws GuzzleException
      */
     public function updateSchedule(string $emailId, string $scheduledAt): ResponseInterface
@@ -135,6 +139,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/emails/cancel-schedule
      * @throws GuzzleException
      */
     public function cancelSchedule(string $emailId): ResponseInterface
@@ -145,6 +150,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/contacts/get-contact
      * @throws GuzzleException
      */
     public function getContact(string $contactBookId, string $contactId): ResponseInterface
@@ -155,6 +161,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/contacts/get-contacts
      * @throws GuzzleException
      */
     public function getContacts(string $contactBookId): ResponseInterface
@@ -165,6 +172,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/contacts/create-contact
      * @throws GuzzleException
      */
     public function createContact(string $contactBookId, array $parameters): ResponseInterface
@@ -178,6 +186,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/contacts/update-contact
      * @throws GuzzleException
      */
     public function updateContact(string $contactBookId, string $contactId, array $parameters): ResponseInterface
@@ -191,6 +200,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/contacts/upsert-contact
      * @throws GuzzleException
      */
     public function upsertContact(string $contactBookId, string $contactId, array $parameters): ResponseInterface
@@ -204,6 +214,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/contacts/delete-contact
      * @throws GuzzleException
      */
     public function deleteContact(string $contactBookId, string $contactId): ResponseInterface
@@ -215,7 +226,7 @@ class Unsend
 
     /**
      * @todo figure out why this returns 404
-     *
+     * @see https://docs.unsend.dev/api-reference/domains/get-domain
      * @throws GuzzleException
      */
     public function getDomain(int $id): ResponseInterface
@@ -236,6 +247,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/domains/create-domain
      * @throws GuzzleException
      */
     public function createDomain(array $parameters): ResponseInterface
@@ -249,6 +261,7 @@ class Unsend
     }
 
     /**
+     * @see https://docs.unsend.dev/api-reference/domains/verify-domain
      * @throws GuzzleException
      */
     public function verifyDomain(int $id): ResponseInterface
@@ -258,6 +271,11 @@ class Unsend
         );
     }
 
+    /**
+     * Returns a full URL to the provided path using the relevant API version.
+     * @param string $path
+     * @return string
+     */
     private static function buildUrl(string $path): string
     {
         return self::$apiBase.$path;
