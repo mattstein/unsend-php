@@ -3,8 +3,11 @@
 This is a barebones little thing for sending [Unsend](https://unsend.dev) messages. You might want to wait until it’s fleshed out a bit.
 
 ```php
-$client = \Unsend\Client::create('api-key', 'self-hosted-url');
+// Initialize the Unsend client
+$client = \Unsend\Client::create('your-api-key', 'https://app.unsend.dev');
 $unsend = new \Unsend\Unsend($client);
+
+// Send an email
 $response = $unsend->sendEmail([
     'to' => 'hello@example.tld',
     'from' => 'reply@example.tld',
