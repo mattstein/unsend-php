@@ -9,6 +9,7 @@ use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Unsend\Exceptions\InvalidArgumentException;
 use Unsend\Exceptions\MissingArgumentException;
+use Unsend\Models\Response;
 
 class Unsend
 {
@@ -29,13 +30,13 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function getEmail(string $emailId)
+    public function getEmail(string $emailId): Response
     {
         $response = $this->client->get(
             self::buildUrl('/emails/'.$emailId)
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -47,7 +48,7 @@ class Unsend
      * @throws InvalidArgumentException
      * @throws JsonException
      */
-    public function listEmails(array $parameters = [])
+    public function listEmails(array $parameters = []): Response
     {
         self::limitParameters($parameters, [
             'page',
@@ -64,7 +65,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -77,7 +78,7 @@ class Unsend
      * @throws InvalidArgumentException
      * @throws JsonException
      */
-    public function sendEmail(array $parameters)
+    public function sendEmail(array $parameters): Response
     {
         self::requireParameters($parameters, [
             'to',
@@ -107,7 +108,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -120,7 +121,7 @@ class Unsend
      * @throws InvalidArgumentException
      * @throws JsonException
      */
-    public function batchEmail(array $parameters)
+    public function batchEmail(array $parameters): Response
     {
         self::requireParameters($parameters, [
             'to',
@@ -150,7 +151,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -161,7 +162,7 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function updateSchedule(string $emailId, string $scheduledAt)
+    public function updateSchedule(string $emailId, string $scheduledAt): Response
     {
         $response = $this->client->patch(
             self::buildUrl('/emails/'.$emailId),
@@ -170,7 +171,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -181,13 +182,13 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function cancelSchedule(string $emailId)
+    public function cancelSchedule(string $emailId): Response
     {
         $response = $this->client->post(
             self::buildUrl('/emails/'.$emailId.'/cancel')
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -198,13 +199,13 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function getContact(string $contactBookId, string $contactId)
+    public function getContact(string $contactBookId, string $contactId): Response
     {
         $response = $this->client->get(
             self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId)
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -216,7 +217,7 @@ class Unsend
      * @throws InvalidArgumentException
      * @throws JsonException
      */
-    public function getContacts(string $contactBookId, array $parameters = [])
+    public function getContacts(string $contactBookId, array $parameters = []): Response
     {
         self::limitParameters($parameters, [
             'emails',
@@ -232,7 +233,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -278,7 +279,7 @@ class Unsend
      * @throws InvalidArgumentException
      * @throws JsonException
      */
-    public function updateContact(string $contactBookId, string $contactId, array $parameters = [])
+    public function updateContact(string $contactBookId, string $contactId, array $parameters = []): Response
     {
         self::limitParameters($parameters, [
             'firstName',
@@ -294,7 +295,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -307,7 +308,7 @@ class Unsend
      * @throws InvalidArgumentException
      * @throws JsonException
      */
-    public function upsertContact(string $contactBookId, string $contactId, array $parameters = [])
+    public function upsertContact(string $contactBookId, string $contactId, array $parameters = []): Response
     {
         self::requireParameters($parameters, [
             'email',
@@ -328,7 +329,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -339,13 +340,13 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function deleteContact(string $contactBookId, string $contactId)
+    public function deleteContact(string $contactBookId, string $contactId): Response
     {
         $response = $this->client->delete(
             self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId)
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -358,13 +359,13 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function getDomain(int $id)
+    public function getDomain(int $id): Response
     {
         $response = $this->client->get(
             self::buildUrl('/domains/'.$id)
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -373,13 +374,13 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function getDomains()
+    public function getDomains(): Response
     {
         $response = $this->client->get(
             self::buildUrl('/domains')
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -391,7 +392,7 @@ class Unsend
      * @throws MissingArgumentException
      * @throws JsonException
      */
-    public function createDomain(array $parameters)
+    public function createDomain(array $parameters): Response
     {
         self::requireParameters($parameters, [
             'name',
@@ -405,7 +406,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
@@ -416,13 +417,13 @@ class Unsend
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function verifyDomain(int $id)
+    public function verifyDomain(int $id): Response
     {
         $response = $this->client->put(
             self::buildUrl('/domains/'.$id.'/verify')
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**

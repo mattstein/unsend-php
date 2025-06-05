@@ -21,7 +21,8 @@ test('sendEmail sends', function () {
         'text' => 'Heyo, this is a test!',
     ]);
 
-    expect($response->emailId)->toBeString();
+    expect($response->getData()->emailId)->toBeString()
+        ->and($response->getStatus())->toBe(200);
 });
 
 test('sendEmail requires arguments', function () {
