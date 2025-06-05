@@ -22,6 +22,8 @@ class Unsend
     }
 
     /**
+     * Returns a single email record by ID.
+     *
      * @see https://docs.unsend.dev/api-reference/emails/get-email
      *
      * @throws GuzzleException
@@ -33,13 +35,13 @@ class Unsend
             self::buildUrl('/emails/'.$emailId)
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
-     * @see https://docs.unsend.dev/api-reference/emails/list-emails
+     * Returns an array of email records, optionally filtered by parameters.
      *
-     * @todo figure out why this returns 404
+     * @see https://docs.unsend.dev/api-reference/emails/list-emails
      *
      * @throws GuzzleException
      * @throws InvalidArgumentException
@@ -62,10 +64,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Sends an email.
+     *
      * @see https://docs.unsend.dev/api-reference/emails/send-email
      *
      * @throws GuzzleException
@@ -103,10 +107,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Sends up to 100 emails in one request.
+     *
      * @see https://docs.unsend.dev/api-reference/emails/batch-email
      *
      * @throws GuzzleException
@@ -144,10 +150,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Updates the targeted send time for a scheduled email.
+     *
      * @see https://docs.unsend.dev/api-reference/emails/update-schedule
      *
      * @throws GuzzleException
@@ -162,10 +170,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Cancels a scheduled email.
+     *
      * @see https://docs.unsend.dev/api-reference/emails/cancel-schedule
      *
      * @throws GuzzleException
@@ -177,10 +187,12 @@ class Unsend
             self::buildUrl('/emails/'.$emailId.'/cancel')
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Returns a single contact record.
+     *
      * @see https://docs.unsend.dev/api-reference/contacts/get-contact
      *
      * @throws GuzzleException
@@ -192,10 +204,12 @@ class Unsend
             self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId)
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Returns an array of contact records, optionally filtered by parameters.
+     *
      * @see https://docs.unsend.dev/api-reference/contacts/get-contacts
      *
      * @throws GuzzleException
@@ -218,10 +232,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Creates a contact record.
+     *
      * @see https://docs.unsend.dev/api-reference/contacts/create-contact
      *
      * @throws GuzzleException
@@ -250,10 +266,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Updates a contact record.
+     *
      * @see https://docs.unsend.dev/api-reference/contacts/update-contact
      *
      * @throws GuzzleException
@@ -276,10 +294,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Upserts a contact record.
+     *
      * @see https://docs.unsend.dev/api-reference/contacts/upsert-contact
      *
      * @throws GuzzleException
@@ -308,10 +328,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Deletes a contact record.
+     *
      * @see https://docs.unsend.dev/api-reference/contacts/delete-contact
      *
      * @throws GuzzleException
@@ -323,10 +345,12 @@ class Unsend
             self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId)
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Returns a single domain record.
+     *
      * @see https://docs.unsend.dev/api-reference/domains/get-domain
      *
      * @todo figure out why this returns 404
@@ -340,10 +364,12 @@ class Unsend
             self::buildUrl('/domains/'.$id)
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Returns an array of domain records.
+     *
      * @throws GuzzleException
      * @throws JsonException
      */
@@ -353,10 +379,12 @@ class Unsend
             self::buildUrl('/domains')
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Creates a domain record.
+     *
      * @see https://docs.unsend.dev/api-reference/domains/create-domain
      *
      * @throws GuzzleException
@@ -377,10 +405,12 @@ class Unsend
             ]
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Attempts to verify a domain.
+     *
      * @see https://docs.unsend.dev/api-reference/domains/verify-domain
      *
      * @throws GuzzleException
@@ -392,13 +422,15 @@ class Unsend
             self::buildUrl('/domains/'.$id.'/verify')
         );
 
-        return $this->prepareResponse($response);
+        return $this->getResponseData($response);
     }
 
     /**
+     * Extracts and returns response JSON as data.
+     *
      * @throws JsonException
      */
-    private function prepareResponse(ResponseInterface $response)
+    private function getResponseData(ResponseInterface $response)
     {
         return json_decode($response->getBody(), false, 512, JSON_THROW_ON_ERROR);
     }
@@ -412,6 +444,8 @@ class Unsend
     }
 
     /**
+     * Throws an exception if required keys are not present in provided arguments.
+     *
      * @throws MissingArgumentException
      */
     private static function requireParameters(array $parameters = [], array $requiredParameters = []): void
@@ -424,6 +458,8 @@ class Unsend
     }
 
     /**
+     * Throws an exception if an unexpected key is present in provided arguments.
+     *
      * @throws InvalidArgumentException
      */
     private static function limitParameters(array $parameters, array $supportedParameters = []): void
