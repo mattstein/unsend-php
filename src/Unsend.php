@@ -39,19 +39,13 @@ class Unsend
      */
     public function listEmails(array $parameters = []): ResponseInterface
     {
-        $supportedParameters = [
+        self::limitParameters($parameters, [
             'page',
             'limit',
             'startDate',
             'endDate',
             'domainId',
-        ];
-
-        foreach ($parameters as $key => $value) {
-            if (! in_array($key, $supportedParameters, true)) {
-                throw new InvalidArgumentException('“'.$key.'” is not a valid argument.');
-            }
-        }
+        ]);
 
         return $this->client->get(
             self::buildUrl('/emails'),
@@ -69,7 +63,12 @@ class Unsend
      */
     public function sendEmail(array $parameters): ResponseInterface
     {
-        $supportedParameters = [
+        self::requireParameters($parameters, [
+            'to',
+            'from',
+        ]);
+
+        self::limitParameters($parameters, [
             'to',
             'from',
             'subject',
@@ -83,24 +82,7 @@ class Unsend
             'attachments',
             'scheduledAt',
             'inReplyToId',
-        ];
-
-        $requiredParameters = [
-            'to',
-            'from',
-        ];
-
-        foreach ($requiredParameters as $parameter) {
-            if (! isset($parameters[$parameter])) {
-                throw new MissingArgumentException('“'.$parameter.'” is required.');
-            }
-        }
-
-        foreach ($parameters as $key => $value) {
-            if (! in_array($key, $supportedParameters, true)) {
-                throw new InvalidArgumentException('“'.$key.'” is not a valid argument.');
-            }
-        }
+        ]);
 
         return $this->client->post(
             self::buildUrl('/emails'),
@@ -113,9 +95,32 @@ class Unsend
     /**
      * @see https://docs.unsend.dev/api-reference/emails/batch-email
      * @throws GuzzleException
+     * @throws MissingArgumentException
+     * @throws InvalidArgumentException
      */
     public function batchEmail(array $parameters): ResponseInterface
     {
+        self::requireParameters($parameters, [
+            'to',
+            'from',
+        ]);
+
+        self::limitParameters($parameters, [
+            'to',
+            'from',
+            'subject',
+            'templateId',
+            'variables',
+            'replyTo',
+            'cc',
+            'bcc',
+            'text',
+            'html',
+            'attachments',
+            'scheduledAt',
+            'inReplyToId',
+        ]);
+
         return $this->client->post(
             self::buildUrl('/emails/batch'),
             [
@@ -163,20 +168,45 @@ class Unsend
     /**
      * @see https://docs.unsend.dev/api-reference/contacts/get-contacts
      * @throws GuzzleException
+     * @throws InvalidArgumentException
      */
-    public function getContacts(string $contactBookId): ResponseInterface
+    public function getContacts(string $contactBookId, array $parameters = []): ResponseInterface
     {
+        self::limitParameters($parameters, [
+            'emails',
+            'page',
+            'limit',
+            'ids',
+        ]);
+
         return $this->client->get(
-            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts')
+            self::buildUrl('/contactBooks/'.$contactBookId.'/contacts'),
+            [
+                'query' => $parameters,
+            ]
         );
     }
 
     /**
      * @see https://docs.unsend.dev/api-reference/contacts/create-contact
      * @throws GuzzleException
+     * @throws MissingArgumentException
+     * @throws InvalidArgumentException
      */
     public function createContact(string $contactBookId, array $parameters): ResponseInterface
     {
+        self::requireParameters($parameters, [
+            'email',
+        ]);
+
+        self::limitParameters($parameters, [
+            'email',
+            'firstName',
+            'lastName',
+            'properties',
+            'subscribed',
+        ]);
+
         return $this->client->post(
             self::buildUrl('/contactBooks/'.$contactBookId.'/contacts'),
             [
@@ -188,9 +218,17 @@ class Unsend
     /**
      * @see https://docs.unsend.dev/api-reference/contacts/update-contact
      * @throws GuzzleException
+     * @throws InvalidArgumentException
      */
-    public function updateContact(string $contactBookId, string $contactId, array $parameters): ResponseInterface
+    public function updateContact(string $contactBookId, string $contactId, array $parameters = []): ResponseInterface
     {
+        self::limitParameters($parameters, [
+            'firstName',
+            'lastName',
+            'properties',
+            'subscribed',
+        ]);
+
         return $this->client->patch(
             self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId),
             [
@@ -202,9 +240,23 @@ class Unsend
     /**
      * @see https://docs.unsend.dev/api-reference/contacts/upsert-contact
      * @throws GuzzleException
+     * @throws MissingArgumentException
+     * @throws InvalidArgumentException
      */
-    public function upsertContact(string $contactBookId, string $contactId, array $parameters): ResponseInterface
+    public function upsertContact(string $contactBookId, string $contactId, array $parameters = []): ResponseInterface
     {
+        self::requireParameters($parameters, [
+            'email',
+        ]);
+
+        self::limitParameters($parameters, [
+            'email',
+            'firstName',
+            'lastName',
+            'properties',
+            'subscribed',
+        ]);
+
         return $this->client->put(
             self::buildUrl('/contactBooks/'.$contactBookId.'/contacts/'.$contactId),
             [
@@ -249,9 +301,15 @@ class Unsend
     /**
      * @see https://docs.unsend.dev/api-reference/domains/create-domain
      * @throws GuzzleException
+     * @throws MissingArgumentException
      */
     public function createDomain(array $parameters): ResponseInterface
     {
+        self::requireParameters($parameters, [
+            'name',
+            'region',
+        ]);
+
         return $this->client->post(
             self::buildUrl('/domains'),
             [
@@ -279,5 +337,29 @@ class Unsend
     private static function buildUrl(string $path): string
     {
         return self::$apiBase.$path;
+    }
+
+    /**
+     * @throws MissingArgumentException
+     */
+    private static function requireParameters(array $parameters = [], array $requiredParameters = []): void
+    {
+        foreach ($requiredParameters as $parameter) {
+            if (! isset($parameters[$parameter])) {
+                throw new MissingArgumentException('“'.$parameter.'” is required.');
+            }
+        }
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private static function limitParameters(array $parameters, array $supportedParameters = []): void
+    {
+        foreach ($parameters as $key => $value) {
+            if (! in_array($key, $supportedParameters, true)) {
+                throw new InvalidArgumentException('“'.$key.'” is not a valid argument.');
+            }
+        }
     }
 }
