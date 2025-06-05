@@ -7,7 +7,7 @@ This is a small, unofficial SDK for [Unsend](https://unsend.dev).
 Install via Composer:
 
 ```
-composer require composer require mattstein/unsend-php
+composer require mattstein/unsend-php
 ```
 
 Create a client instance with your API key and specify your Unsend domain if you self host:
