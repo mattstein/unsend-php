@@ -15,6 +15,9 @@ $response = $unsend->sendEmail([
     'html' => '<p>This is a test!</p>',
     'text' => 'Heyo, this is a test!'
 ]);
+
+// Print email ID
+echo $response->getData()->emailId;
 ```
 
 See the [API Reference](https://docs.unsend.dev/api-reference/introduction) for expected usage.
