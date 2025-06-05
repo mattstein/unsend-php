@@ -10,7 +10,7 @@ test('throws exception for bad host', function () {
         new \GuzzleHttp\Exception\ConnectException(
             'Could not resolve host: bad-host.example (see https://curl.haxx.se/libcurl/c/libcurl-errors.html)',
             new \GuzzleHttp\Psr7\Request('GET', '')
-        )
+        ),
     ]);
     $handlerStack = HandlerStack::create($mock);
     $client = new Client(['handler' => $handlerStack]);
@@ -24,7 +24,7 @@ test('throws exception for incorrect endpoint', function () {
             '`GET https://not-unsend.example/api/v1/emails` resulted in a `404 Not Found` response:',
             new \GuzzleHttp\Psr7\Request('GET', '/api/v1/emails'),
             new Response(404, ['Content-Type' => 'application/json']),
-        )
+        ),
     ]);
     $handlerStack = HandlerStack::create($mock);
     $client = new Client(['handler' => $handlerStack]);
