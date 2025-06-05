@@ -21,10 +21,7 @@ test('sendEmail sends', function () {
         'text' => 'Heyo, this is a test!',
     ]);
 
-    $responseData = json_decode($response->getBody()->getContents(), false);
-
-    expect($response->getStatusCode())->toBeIn([200])
-        ->and($responseData->emailId)->toBeString();
+    expect($response->emailId)->toBeString();
 });
 
 test('sendEmail requires arguments', function () {
