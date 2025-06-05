@@ -246,7 +246,7 @@ class Unsend
      * @throws InvalidArgumentException
      * @throws JsonException
      */
-    public function createContact(string $contactBookId, array $parameters)
+    public function createContact(string $contactBookId, array $parameters): Response
     {
         self::requireParameters($parameters, [
             'email',
@@ -267,7 +267,7 @@ class Unsend
             ]
         );
 
-        return $this->getResponseData($response);
+        return Response::create($response);
     }
 
     /**
