@@ -167,7 +167,9 @@ class Unsend
         $response = $this->client->patch(
             self::buildUrl('/emails/'.$emailId),
             [
-                'scheduledAt' => $scheduledAt,
+                RequestOptions::JSON => [
+                    'scheduledAt' => $scheduledAt,
+                ],
             ]
         );
 
