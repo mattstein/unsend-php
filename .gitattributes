@@ -1,0 +1,6 @@
+/.github/ export-ignore
+/tests/ export-ignore
+/CHANGELOG.md export-ignore
+/README.md export-ignore
+/phpunit.xml
+/composer.lock export-ignore

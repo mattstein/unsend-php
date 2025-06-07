@@ -1,6 +1,8 @@
 # Unsend PHP Library
 
-This is a small, unofficial SDK for [Unsend](https://unsend.dev).
+An unofficial SDK for [Unsend](https://unsend.dev).
+
+![Unsend + PHP](https://raw.githubusercontent.com/mattstein/unsend-php/refs/heads/main/assets/unsend-banner.png)
 
 ## Installation & Usage
 
