@@ -9,8 +9,6 @@ class Client
     /**
      * Returns a preconfigured instance of a Guzzle client.
      *
-     * @param string $apiKey
-     * @param string $baseUrl
      * @param array{
      *     base_uri?: string,
      *     timeout?: float|int,

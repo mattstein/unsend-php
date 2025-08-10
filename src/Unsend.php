@@ -6,17 +6,17 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use JsonException;
-use Psr\Http\Message\ResponseInterface;
+use Unsend\Exceptions\ApiException;
 use Unsend\Exceptions\InvalidArgumentException;
 use Unsend\Exceptions\MissingArgumentException;
 use Unsend\Models\Response;
-use Unsend\Exceptions\ApiException;
 
 class Unsend
 {
     private GuzzleClient $client;
 
     private static string $apiBase = '/api/v1';
+
     private const DEFAULT_PAGE_SIZE = 50;
 
     public function __construct(GuzzleClient $client)
@@ -39,8 +39,7 @@ class Unsend
         string $apiKey,
         string $baseUrl = 'https://app.unsend.dev',
         array $options = []
-    ): self
-    {
+    ): self {
         return new self(Client::create($apiKey, $baseUrl, $options));
     }
 
@@ -62,9 +61,6 @@ class Unsend
      *
      * @see https://docs.unsend.dev/api-reference/emails/list-emails
      *
-     * @throws GuzzleException
-     * @throws InvalidArgumentException
-     * @throws JsonException
      * @param array{
      *     page?: int,
      *     limit?: int,
@@ -72,6 +68,10 @@ class Unsend
      *     endDate?: string,
      *     domainId?: int
      * } $parameters
+     *
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws JsonException
      */
     public function listEmails(array $parameters = []): Response
     {
@@ -114,7 +114,7 @@ class Unsend
             ]));
 
             $data = $response->getData();
-            if (!isset($data->data) || !is_array($data->data) || count($data->data) === 0) {
+            if (! isset($data->data) || ! is_array($data->data) || count($data->data) === 0) {
                 break;
             }
 
@@ -141,10 +141,6 @@ class Unsend
      *
      * @see https://docs.unsend.dev/api-reference/emails/send-email
      *
-     * @throws GuzzleException
-     * @throws MissingArgumentException
-     * @throws InvalidArgumentException
-     * @throws JsonException
      * @param array{
      *     to: string|list<string>,
      *     from: string,
@@ -160,6 +156,11 @@ class Unsend
      *     scheduledAt?: string,
      *     inReplyToId?: string
      * } $parameters
+     *
+     * @throws GuzzleException
+     * @throws MissingArgumentException
+     * @throws InvalidArgumentException
+     * @throws JsonException
      */
     public function sendEmail(array $parameters): Response
     {
@@ -194,11 +195,12 @@ class Unsend
      *
      * @see https://docs.unsend.dev/api-reference/emails/batch-email
      *
+     * @param  array<string,mixed>  $parameters
+     *
      * @throws GuzzleException
      * @throws MissingArgumentException
      * @throws InvalidArgumentException
      * @throws JsonException
-     * @param array<string,mixed> $parameters
      */
     public function batchEmail(array $parameters): Response
     {
@@ -276,15 +278,16 @@ class Unsend
      *
      * @see https://docs.unsend.dev/api-reference/contacts/get-contacts
      *
-     * @throws GuzzleException
-     * @throws InvalidArgumentException
-     * @throws JsonException
      * @param array{
      *     emails?: string|list<string>,
      *     page?: int,
      *     limit?: int,
      *     ids?: string|list<string>
      * } $parameters
+     *
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws JsonException
      */
     public function getContacts(string $contactBookId, array $parameters = []): Response
     {
@@ -305,10 +308,6 @@ class Unsend
      *
      * @see https://docs.unsend.dev/api-reference/contacts/create-contact
      *
-     * @throws GuzzleException
-     * @throws MissingArgumentException
-     * @throws InvalidArgumentException
-     * @throws JsonException
      * @param array{
      *     email: string,
      *     firstName?: string,
@@ -316,6 +315,11 @@ class Unsend
      *     properties?: array<string,mixed>,
      *     subscribed?: bool
      * } $parameters
+     *
+     * @throws GuzzleException
+     * @throws MissingArgumentException
+     * @throws InvalidArgumentException
+     * @throws JsonException
      */
     public function createContact(string $contactBookId, array $parameters): Response
     {
@@ -337,19 +341,20 @@ class Unsend
     }
 
     /**
-        * Updates a contact record.
-        *
-        * @see https://docs.unsend.dev/api-reference/contacts/update-contact
-        *
-        * @throws GuzzleException
-        * @throws InvalidArgumentException
-        * @throws JsonException
+     * Updates a contact record.
+     *
+     * @see https://docs.unsend.dev/api-reference/contacts/update-contact
+     *
      * @param array{
      *     firstName?: string,
      *     lastName?: string,
      *     properties?: array<string,mixed>,
      *     subscribed?: bool
      * } $parameters
+     *
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws JsonException
      */
     public function updateContact(string $contactBookId, string $contactId, array $parameters = []): Response
     {
@@ -370,10 +375,6 @@ class Unsend
      *
      * @see https://docs.unsend.dev/api-reference/contacts/upsert-contact
      *
-     * @throws GuzzleException
-     * @throws MissingArgumentException
-     * @throws InvalidArgumentException
-     * @throws JsonException
      * @param array{
      *     email: string,
      *     firstName?: string,
@@ -381,6 +382,11 @@ class Unsend
      *     properties?: array<string,mixed>,
      *     subscribed?: bool
      * } $parameters
+     *
+     * @throws GuzzleException
+     * @throws MissingArgumentException
+     * @throws InvalidArgumentException
+     * @throws JsonException
      */
     public function upsertContact(string $contactBookId, string $contactId, array $parameters): Response
     {
@@ -445,13 +451,14 @@ class Unsend
      *
      * @see https://docs.unsend.dev/api-reference/domains/create-domain
      *
-     * @throws GuzzleException
-     * @throws MissingArgumentException
-     * @throws JsonException
      * @param array{
      *     name: string,
      *     region: string
      * } $parameters
+     *
+     * @throws GuzzleException
+     * @throws MissingArgumentException
+     * @throws JsonException
      */
     public function createDomain(array $parameters): Response
     {
@@ -491,9 +498,10 @@ class Unsend
     /**
      * Throws an exception if required keys are not present in provided arguments.
      *
+     * @param  array<string,mixed>  $parameters
+     * @param  array<int,string>  $requiredParameters
+     *
      * @throws MissingArgumentException
-     * @param array<string,mixed> $parameters
-     * @param array<int,string> $requiredParameters
      */
     private static function requireParameters(array $parameters = [], array $requiredParameters = []): void
     {
@@ -507,9 +515,10 @@ class Unsend
     /**
      * Throws an exception if an unexpected key is present in provided arguments.
      *
+     * @param  array<string,mixed>  $parameters
+     * @param  array<int,string>  $supportedParameters
+     *
      * @throws InvalidArgumentException
-     * @param array<string,mixed> $parameters
-     * @param array<int,string> $supportedParameters
      */
     private static function limitParameters(array $parameters, array $supportedParameters = []): void
     {
@@ -523,10 +532,11 @@ class Unsend
     /**
      * Sends an HTTP request and returns a wrapped Response, throwing ApiException on non-2xx.
      *
+     * @param  array<string,mixed>  $options
+     *
      * @throws ApiException
      * @throws GuzzleException
      * @throws JsonException
-     * @param array<string,mixed> $options
      */
     private function sendRequest(string $method, string $uri, array $options = []): Response
     {
