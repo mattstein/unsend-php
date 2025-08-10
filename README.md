@@ -4,6 +4,8 @@ An unofficial SDK for [Unsend](https://unsend.dev).
 
 ![Unsend + PHP](https://raw.githubusercontent.com/mattstein/unsend-php/refs/heads/main/assets/unsend-banner.png)
 
+> On non-2xx responses, methods throw `\Unsend\Exceptions\ApiException` with parsed message and status code.
+
 ## Installation & Usage
 
 Install via Composer:
@@ -15,9 +17,8 @@ composer require mattstein/unsend-php
 Create a client instance with your API key and specify your Unsend domain if you self host:
 
 ```php
-// Initialize the Unsend client
-$client = \Unsend\Client::create('your-api-key', 'https://app.unsend.dev');
-$unsend = new \Unsend\Unsend($client);
+// Initialize via factory
+$unsend = \Unsend\Unsend::create('your-api-key', 'https://app.unsend.dev');
 ```
 
 You can then use any of the included methods to interact with the API, where `getData()` provides decoded response data and `getResponseObject()` provides the entire Guzzle response:
@@ -62,6 +63,13 @@ $response = $unsend->listEmails([
 foreach ($response->getData()->data as $email) {
     echo $email->subject . "\n";
 }
+### Iterate over all emails
+
+```php
+foreach ($unsend->iterateEmails(['domainId' => 3]) as $email) {
+    echo $email->subject . "\n";
+}
+```
 ```
 
 ### `sendEmail(array $parameters)`

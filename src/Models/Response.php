@@ -21,8 +21,9 @@ class Response
         $response = new self;
         $response->responseObject = $responseObject;
         $response->status = $responseObject->getStatusCode();
-        $response->data = json_decode(
-            $responseObject->getBody(),
+        $body = (string) $responseObject->getBody();
+        $response->data = $body === '' ? null : json_decode(
+            $body,
             false,
             512,
             JSON_THROW_ON_ERROR

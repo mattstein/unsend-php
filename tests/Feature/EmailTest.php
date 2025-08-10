@@ -4,6 +4,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Unsend\Exceptions\ApiException;
 
 test('throws exception for bad host', function () {
     $mock = new MockHandler([
@@ -18,21 +19,17 @@ test('throws exception for bad host', function () {
     $unsend->listEmails();
 })->throws(GuzzleHttp\Exception\ConnectException::class);
 
-test('throws exception for incorrect endpoint', function () {
+test('wraps non-2xx in ApiException', function () {
     $mock = new MockHandler([
-        new \GuzzleHttp\Exception\ClientException(
-            '`GET https://not-unsend.example/api/v1/emails` resulted in a `404 Not Found` response:',
-            new \GuzzleHttp\Psr7\Request('GET', '/api/v1/emails'),
-            new Response(404, ['Content-Type' => 'application/json']),
-        ),
+        new Response(404, ['Content-Type' => 'application/json'], '{"error":{"code":"NOT_FOUND","message":"Not found"}}'),
     ]);
     $handlerStack = HandlerStack::create($mock);
     $client = new Client(['handler' => $handlerStack]);
     $unsend = new \Unsend\Unsend($client);
     $unsend->listEmails();
-})->throws(GuzzleHttp\Exception\ClientException::class);
+})->throws(ApiException::class);
 
-test('throws exception for bad API key', function () {
+test('wraps forbidden in ApiException', function () {
     $mock = new MockHandler([
         new Response(403, ['Content-Type' => 'application/json'], '{"error":{"code":"FORBIDDEN","message":"Invalid API token"}}'),
     ]);
@@ -40,7 +37,7 @@ test('throws exception for bad API key', function () {
     $client = new Client(['handler' => $handlerStack]);
     $unsend = new \Unsend\Unsend($client);
     $unsend->listEmails();
-})->throws(GuzzleHttp\Exception\ClientException::class);
+})->throws(ApiException::class);
 
 test('sendEmail sends', function () {
     $mock = new MockHandler([
