@@ -35,7 +35,11 @@ class Unsend
      *     headers?: array<string,string>
      * } $options
      */
-    public static function create(string $apiKey, string $baseUrl = 'https://app.unsend.dev', array $options = []): self
+    public static function create(
+        string $apiKey,
+        string $baseUrl = 'https://app.unsend.dev',
+        array $options = []
+    ): self
     {
         return new self(Client::create($apiKey, $baseUrl, $options));
     }

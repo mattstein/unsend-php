@@ -63,13 +63,16 @@ $response = $unsend->listEmails([
 foreach ($response->getData()->data as $email) {
     echo $email->subject . "\n";
 }
-### Iterate over all emails
+```
+
+### `iterateEmails(array $parameters = [])`
+
+Lazy iterator for `listEmails()` that continues through pagination instead of returning pagination metadata.
 
 ```php
 foreach ($unsend->iterateEmails(['domainId' => 3]) as $email) {
     echo $email->subject . "\n";
 }
-```
 ```
 
 ### `sendEmail(array $parameters)`
