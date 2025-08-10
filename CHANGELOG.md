@@ -18,7 +18,7 @@
 - Tests updated to assert `ApiException`
 - Composer metadata updated: require `ext-json`; add PHPStan to dev dependencies
 
-[1.1.0]: https://github.com/mattstein/unsend-php/compare/v1.0.0...v1.1.0
+[1.1.0]: https://github.com/mattstein/unsend-php/compare/1.0.0...1.1.0
 
 ## 1.0.0 - 2025-08-06
 
