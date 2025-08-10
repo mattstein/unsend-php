@@ -1,11 +1,11 @@
 # Unsend PHP Library Release Notes
 
-## [Unreleased]
+## 1.1.0 - 2025-08-09
 
 ### Added
 
-- `Unsend::create(apiKey, baseUrl?, options?)` factory for simpler initialization
-- `iterateEmails(array $parameters = [])` for seamless pagination
+- `Unsend::create()` factory for simpler initialization
+- `iterateEmails()` for seamless pagination
 - Unified `ApiException` for non-2xx responses with parsed message/status
 - PHPStan configuration and stricter array-shape PHPDocs
 
